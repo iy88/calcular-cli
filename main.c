@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {
-	char* s = malloc(sizeof(char) * 201);
+	char* s = malloc(sizeof(char) * 202);
 	if (s == NULL) {
 		printf("no mem\n");
 		return -1;
@@ -14,7 +14,7 @@ input:
 	while ((c = getchar()) != '\n') {
 		s[count] = c;
 		count++;
-		if (count == 101) {
+		if (count == 202) {
 			printf("expression too long");
 			break;
 		}
@@ -27,5 +27,6 @@ input:
 		c = getchar();
 		goto input;
 	}
+	free(s);
 	return 0;
 }
