@@ -57,7 +57,7 @@ int mapSet(hashMapPtr map, char* key, void* value, int size) {
 	if (map->buckets[idx] == 0) {
 		map_node_ptr node = (map_node_ptr)malloc(sizeof(map_node));
 		if (node != NULL) {
-			node->key = (char*)malloc(lenStr(key) * sizeof(char));
+			node->key = (char*)malloc((lenStr(key) + 1) * sizeof(char));
 			if (node->key != NULL) {
 				copy(node->key, key, (lenStr(key) + 1) * sizeof(char));
 				node->value = malloc(size);
@@ -116,7 +116,7 @@ int mapSet(hashMapPtr map, char* key, void* value, int size) {
 		}
 		map_node_ptr node = (map_node_ptr)malloc(sizeof(map_node));
 		if (node != NULL) {
-			node->key = (char*)malloc(lenStr(key) * sizeof(char));
+			node->key = (char*)malloc((lenStr(key) + 1) * sizeof(char));
 			if (node->key != NULL) {
 				copy(node->key, key, (lenStr(key) + 1) * sizeof(char));
 				node->value = malloc(size);

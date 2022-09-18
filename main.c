@@ -20,7 +20,7 @@ input:
 		}
 	}
 	s[count] = '\0';
-	printf("res: %f\n",calcPostfixExpression(s));
+	printf("res: %f\n", calcInfixExpression(s));
 	printf("continue? (y/n) ");
 	c = getchar();
 	if (c == 'y') {

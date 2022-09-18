@@ -13,14 +13,15 @@ typedef stack_node* stack_node_ptr;
 
 typedef struct {
 	unsigned long long size;
-	stack_node_ptr head;
+	stack_node_ptr root;
+	void* top;
 } stack;
 
 typedef stack* stackPtr;
 
 stackPtr createStack();
 
-int stackPush(stackPtr st,void* data, int size);
+int stackPush(stackPtr st,void* data, unsigned long long size);
 
 void* stackPop(stackPtr st);
 
