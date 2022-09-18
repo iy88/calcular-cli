@@ -31,7 +31,8 @@ long double calcPostfixExpression(char* expression) {
 		}
 		else if (c == '+' || c == '-' || c == '*' || c == '/') {
 			int flag = 0;
-			long double num2 = 0.0;
+			long double *num2 = malloc(sizeof(long double));
+			*num2 = 0.0;
 			if (tmp->size != 0) {
 				unsigned int tInt = 0;
 				char* tChar = NULL;
@@ -39,14 +40,16 @@ long double calcPostfixExpression(char* expression) {
 				if (sign) {
 					while (*(tChar = stackPop(tmp)) != '.') {
 						tInt = (*tChar - 48) * e10 + tInt;
+						free(tChar);
 						e10 *= 10;
 					}
-					num2 += (long double)tInt / e10;
+					*num2 += (long double)tInt / e10;
 				}
 				e10 = 1;
 				tInt = 0;
 				while ((tChar = stackPop(tmp)) != NULL) {
 					tInt = (*tChar - 48) * e10 + tInt;
+					free(tChar);
 					e10 *= 10;
 				}
 				num2 += tInt;
@@ -54,46 +57,51 @@ long double calcPostfixExpression(char* expression) {
 				flag = 1;
 			}
 			if (flag) {
-				long double num1 = *(long double*)stackPop(st);
+				long double *num1 = (long double*)stackPop(st);
 				long double res;
 				switch (c) {
 				case '+':
-					res = num1 + num2;
+					res = *num1 + *num2;
 					break;
 				case '-':
-					res = num1 - num2;
+					res = *num1 - *num2;
 					break;
 				case '*':
-					res = num1 * num2;
+					res = *num1 * *num2;
 					break;
 				case '/':
-					res = num1 / num2;
+					res = *num1 / *num2;
 					break;
 				default:
 					break;
 				}
+				free(num1);
+				free(num2);
 				stackPush(st, &res, sizeof(long double));
 			}
 			else {
-				num2 = *(long double*)stackPop(st);
-				long double num1 = *(long double*)stackPop(st);
+				free(num2);
+				num2 = (long double*)stackPop(st);
+				long double *num1 = (long double*)stackPop(st);
 				long double res;
 				switch (c) {
 				case '+':
-					res = num1 + num2;
+					res = *num1 + *num2;
 					break;
 				case '-':
-					res = num1 - num2;
+					res = *num1 - *num2;
 					break;
 				case '*':
-					res = num1 * num2;
+					res = *num1 * *num2;
 					break;
 				case '/':
-					res = num1 / num2;
+					res = *num1 / *num2;
 					break;
 				default:
 					break;
 				}
+				free(num1);
+				free(num2);
 				stackPush(st, &res, sizeof(long double));
 			}
 		}
@@ -106,6 +114,7 @@ long double calcPostfixExpression(char* expression) {
 				if (sign) {
 					while (*(tChar = stackPop(tmp)) != '.') {
 						tInt = (*tChar - 48) * e10 + tInt;
+						free(tChar);
 						e10 *= 10;
 					}
 					num += (long double)tInt / e10;
@@ -114,6 +123,7 @@ long double calcPostfixExpression(char* expression) {
 				tInt = 0;
 				while ((tChar = stackPop(tmp)) != NULL) {
 					tInt = (*tChar - 48) * e10 + tInt;
+					free(tChar);
 					e10 *= 10;
 				}
 				num += tInt;
@@ -125,9 +135,11 @@ long double calcPostfixExpression(char* expression) {
 	}
 	stackClean(tmp);
 	stackDestory(tmp);
-	long double res = *(long double*)stackPop(st);
+	long double *p = (long double*)stackPop(st);
 	stackClean(st);
 	stackDestory(st);
+	long double res = *p;
+	free(p);
 	return res;
 }
 
@@ -155,8 +167,11 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
+				char* tmpC;
 				while (tmp->size != 0) {
-					num[size - 1 - j] = *(char*)stackPop(tmp);
+					tmpC = (char*)stackPop(tmp);
+					num[size - 1 - j] = *tmpC;
+					free(tmpC);
 					j++;
 				}
 				stackPush(nums, num, sizeof(char) * (size + 1));
@@ -182,7 +197,7 @@ long double calcInfixExpression(char* expression) {
 				else {
 					while (ops->size > 0 && *(char*)ops->top != '(' && *(int*)mapGet(m, s1) <= *(int*)mapGet(m, s2)) {
 						stackPush(nums, s2, sizeof(char) * 2);
-						stackPop(ops);
+						free(stackPop(ops));
 						if (ops->top != NULL) {
 							s2[0] = *(char*)ops->top;
 						}
@@ -199,8 +214,11 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
+				char* tmpC;
 				while (tmp->size != 0) {
-					num[size - 1 - j] = *(char*)stackPop(tmp);
+					tmpC = (char*)stackPop(tmp);
+					num[size - 1 - j] = *tmpC;
+					free(tmpC);
 					j++;
 				}
 				stackPush(nums, num, sizeof(char) * (size + 1));
@@ -218,17 +236,23 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
+				char *tmpC;
 				while (tmp->size != 0) {
-					num[size - 1 - j] = *(char*)stackPop(tmp);
+					tmpC = (char*)stackPop(tmp);
+					num[size - 1 - j] = *tmpC;
+					free(tmpC);
 					j++;
 				}
 				stackPush(nums, num, sizeof(char) * (size + 1));
 				free(num);
 			}
 			char* s = malloc(sizeof(char) * 2);
+			char* tmpC;
 			s[1] = '\0';
 			while (*(char*)ops->top != '(') {
-				s[0] = *(char*)stackPop(ops);
+				tmpC = (char*)stackPop(ops);
+				s[0] = *tmpC;
+				free(tmpC);
 				stackPush(nums, s, sizeof(char) * 2);
 			}
 			stackPop(ops);
@@ -244,8 +268,11 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
+				char *tmpC;
 				while (tmp->size != 0) {
-					num[size - 1 - j] = *(char*)stackPop(tmp);
+					tmpC = (char*)stackPop(tmp);
+					num[size - 1 - j] = *tmpC;
+					free(tmpC);
 					j++;
 				}
 				stackPush(nums, num, sizeof(char) * (size + 1));
@@ -263,8 +290,11 @@ long double calcInfixExpression(char* expression) {
 		const unsigned long long size = tmp->size;
 		num[size] = '\0';
 		int j = 0;
+		char *tmpC;
 		while (tmp->size != 0) {
-			num[size - 1 - j] = *(char*)stackPop(tmp);
+			tmpC = (char*)stackPop(tmp);
+			num[size - 1 - j] = *tmpC;
+			free(tmpC);
 			j++;
 		}
 		stackPush(nums, num, sizeof(char) * (size + 1));
@@ -280,8 +310,11 @@ long double calcInfixExpression(char* expression) {
 		exit(-1);
 	}
 	s[1] = '\0';
+	char* tmpC;
 	while (ops->size > 0) {
-		s[0] = *(char*)stackPop(ops);
+		tmpC = (char*)stackPop(ops);
+		s[0] = *tmpC;
+		free(tmpC);
 		stackPush(nums, s, sizeof(char) * 2);
 	}
 	free(s);
@@ -290,10 +323,11 @@ long double calcInfixExpression(char* expression) {
 	unsigned long long fullSize = nums->size;
 	stackPtr tNums = createStack();
 	while (nums->size > 0) {
-		char* s = stackPop(nums);
+		s = stackPop(nums);
 		unsigned long long size = slen(s);
 		fullSize += size;
 		stackPush(tNums, s, sizeof(char*) * size);
+		free(s);
 	}
 	stackClean(nums);
 	stackDestory(nums);
@@ -310,10 +344,13 @@ long double calcInfixExpression(char* expression) {
 		idx += size;
 		exp[idx] = ' ';
 		idx++;
+		free(s);
 	}
 	exp[fullSize - 1] = '\0';
 	stackClean(tNums);
 	stackDestory(tNums);
-	printf("RPN: %s\n", exp);
-	return calcPostfixExpression(exp);
+	//printf("RPN: %s\n", exp);
+	long double res = calcPostfixExpression(exp);
+	free(exp);
+	return res;
 }

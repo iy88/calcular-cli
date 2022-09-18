@@ -123,5 +123,6 @@ void stackClean(stackPtr st) {
 }
 
 void stackDestory(stackPtr st) {
+	free(st->root);
 	free(st);
 }
