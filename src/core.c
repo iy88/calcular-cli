@@ -198,9 +198,7 @@ long double calcInfixExpression(char* expression) {
 					while (ops->size > 0 && *(char*)ops->top != '(' && *(int*)mapGet(m, s1) <= *(int*)mapGet(m, s2)) {
 						stackPush(nums, s2, sizeof(char) * 2);
 						free(stackPop(ops));
-						if (ops->top != NULL) {
-							s2[0] = *(char*)ops->top;
-						}
+						s2[0] = *(char*)ops->top;
 					}
 					stackPush(ops, s1, sizeof(char) * 2);
 					free(s1);
@@ -255,7 +253,7 @@ long double calcInfixExpression(char* expression) {
 				free(tmpC);
 				stackPush(nums, s, sizeof(char) * 2);
 			}
-			stackPop(ops);
+			free(stackPop(ops));
 			free(s);
 		}
 		else {
