@@ -58,56 +58,59 @@ long double calcPostfixExpression(char* expression) {
 			}
 			if (flag) {
 				long double *num1 = (long double*)stackPop(st);
-				long double res;
+				long double* res = malloc(sizeof(long double));
+				*res = 0;
 				switch (c) {
 				case '+':
-					res = *num1 + *num2;
+					*res = *num1 + *num2;
 					break;
 				case '-':
-					res = *num1 - *num2;
+					*res = *num1 - *num2;
 					break;
 				case '*':
-					res = *num1 * *num2;
+					*res = *num1 * *num2;
 					break;
 				case '/':
-					res = *num1 / *num2;
+					*res = *num1 / *num2;
 					break;
 				default:
 					break;
 				}
 				free(num1);
 				free(num2);
-				stackPush(st, &res, sizeof(long double));
+				stackPush(st, res, sizeof(long double));
 			}
 			else {
 				free(num2);
 				num2 = (long double*)stackPop(st);
 				long double *num1 = (long double*)stackPop(st);
-				long double res;
+				long double *res = malloc(sizeof(long double));
+				*res = 0;
 				switch (c) {
 				case '+':
-					res = *num1 + *num2;
+					*res = *num1 + *num2;
 					break;
 				case '-':
-					res = *num1 - *num2;
+					*res = *num1 - *num2;
 					break;
 				case '*':
-					res = *num1 * *num2;
+					*res = *num1 * *num2;
 					break;
 				case '/':
-					res = *num1 / *num2;
+					*res = *num1 / *num2;
 					break;
 				default:
 					break;
 				}
 				free(num1);
 				free(num2);
-				stackPush(st, &res, sizeof(long double));
+				stackPush(st, res, sizeof(long double));
 			}
 		}
 		else {
 			if (tmp->size != 0) {
-				long double num = 0.0;
+				long double *num = malloc(sizeof(long double));
+				*num = 0.0;
 				unsigned int tInt = 0;
 				char* tChar;
 				int e10 = 1;
@@ -117,7 +120,7 @@ long double calcPostfixExpression(char* expression) {
 						free(tChar);
 						e10 *= 10;
 					}
-					num += (long double)tInt / e10;
+					*num += (long double)tInt / e10;
 				}
 				e10 = 1;
 				tInt = 0;
@@ -126,8 +129,8 @@ long double calcPostfixExpression(char* expression) {
 					free(tChar);
 					e10 *= 10;
 				}
-				num += tInt;
-				stackPush(st, &num, sizeof(long double));
+				*num += tInt;
+				stackPush(st, num, sizeof(long double));
 				sign = 0;
 			}
 		}

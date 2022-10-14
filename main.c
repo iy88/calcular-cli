@@ -3,6 +3,7 @@
 
 int main() {
 	char* s = malloc(sizeof(char) * 202);
+	long double res = 0;
 	if (s == NULL) {
 		printf("no mem\n");
 		return -1;
@@ -20,7 +21,8 @@ input:
 		}
 	}
 	s[count] = '\0';
-	printf("res: %f\n", calcInfixExpression(s));
+	res = calcInfixExpression(s);
+	printf("%s => %Lf\n", s, res);
 	printf("continue? (y/n) ");
 	c = getchar();
 	if (c == 'y') {
