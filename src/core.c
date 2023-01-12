@@ -32,6 +32,10 @@ long double calcPostfixExpression(char* expression) {
 		else if (c == '+' || c == '-' || c == '*' || c == '/') {
 			int flag = 0;
 			long double *num2 = malloc(sizeof(long double));
+			if (!num2) {
+				perror("alloc failure\n");
+				return 0;
+			}
 			*num2 = 0.0;
 			if (tmp->size != 0) {
 				unsigned int tInt = 0;
@@ -59,7 +63,11 @@ long double calcPostfixExpression(char* expression) {
 			if (flag) {
 				long double *num1 = (long double*)stackPop(st);
 				long double* res = malloc(sizeof(long double));
-				*res = 0;
+				if (!res) {
+					perror("alloc failure\n");
+					return 0;
+				}
+				*res = 0.0;
 				switch (c) {
 				case '+':
 					*res = *num1 + *num2;
@@ -85,7 +93,11 @@ long double calcPostfixExpression(char* expression) {
 				num2 = (long double*)stackPop(st);
 				long double *num1 = (long double*)stackPop(st);
 				long double *res = malloc(sizeof(long double));
-				*res = 0;
+				if (!res) {
+					perror("alloc failure\n");
+					return 0;
+				}
+				*res = 0.0;
 				switch (c) {
 				case '+':
 					*res = *num1 + *num2;
@@ -110,6 +122,10 @@ long double calcPostfixExpression(char* expression) {
 		else {
 			if (tmp->size != 0) {
 				long double *num = malloc(sizeof(long double));
+				if (!num) {
+					perror("alloc failure\n");
+					return 0;
+				}
 				*num = 0.0;
 				unsigned int tInt = 0;
 				char* tChar;
