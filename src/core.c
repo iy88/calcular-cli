@@ -183,6 +183,10 @@ long double calcInfixExpression(char* expression) {
 		else if (c == '+' || c == '-' || c == '*' || c == '/') {
 			if (tmp->size != 0) {
 				char* num = malloc(sizeof(char) * (tmp->size + 1));
+				if (!num) {
+					perror("alloc error\n");
+					return 0;
+				}
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
@@ -205,9 +209,17 @@ long double calcInfixExpression(char* expression) {
 			}
 			else {
 				char* s1 = malloc(sizeof(char) * 2);
+				if (!s1) {
+					perror("alloc error\n");
+					return 0;
+				}
 				s1[0] = c;
 				s1[1] = '\0';
 				char* s2 = malloc(sizeof(char) * 2);
+				if (!s2) {
+					perror("alloc error\n");
+					return 0;
+				}
 				s2[0] = *(char*)ops->top;
 				s2[1] = '\0';
 				if (*(int*)mapGet(m, s1) > *(int*)mapGet(m, s2)) {
@@ -231,6 +243,10 @@ long double calcInfixExpression(char* expression) {
 		else if (c == '(') {
 			if (tmp->size != 0) {
 				char* num = malloc(sizeof(char) * (tmp->size + 1));
+				if (!num) {
+					perror("alloc error\n");
+					return 0;
+				}
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
@@ -245,6 +261,10 @@ long double calcInfixExpression(char* expression) {
 				free(num);
 			}
 			char* s = malloc(sizeof(char) * 2);
+			if (!s) {
+				perror("alloc error\n");
+				return 0;
+			}
 			s[0] = c;
 			s[1] = '\0';
 			stackPush(ops, s, sizeof(char) * 2);
@@ -253,6 +273,10 @@ long double calcInfixExpression(char* expression) {
 		else if (c == ')') {
 			if (tmp->size != 0) {
 				char* num = malloc(sizeof(char) * (tmp->size + 1));
+				if (!num) {
+					perror("alloc error\n");
+					return 0;
+				}
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
@@ -267,6 +291,10 @@ long double calcInfixExpression(char* expression) {
 				free(num);
 			}
 			char* s = malloc(sizeof(char) * 2);
+			if (!s) {
+				perror("alloc error\n");
+				return 0;
+			}
 			char* tmpC;
 			s[1] = '\0';
 			while (*(char*)ops->top != '(') {
