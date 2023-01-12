@@ -31,7 +31,7 @@ long double calcPostfixExpression(char* expression) {
 		}
 		else if (c == '+' || c == '-' || c == '*' || c == '/') {
 			int flag = 0;
-			long double *num2 = malloc(sizeof(long double));
+			long double* num2 = malloc(sizeof(long double));
 			if (!num2) {
 				perror("alloc failure\n");
 				return 0;
@@ -61,7 +61,7 @@ long double calcPostfixExpression(char* expression) {
 				flag = 1;
 			}
 			if (flag) {
-				long double *num1 = (long double*)stackPop(st);
+				long double* num1 = (long double*)stackPop(st);
 				long double* res = malloc(sizeof(long double));
 				if (!res) {
 					perror("alloc failure\n");
@@ -91,8 +91,8 @@ long double calcPostfixExpression(char* expression) {
 			else {
 				free(num2);
 				num2 = (long double*)stackPop(st);
-				long double *num1 = (long double*)stackPop(st);
-				long double *res = malloc(sizeof(long double));
+				long double* num1 = (long double*)stackPop(st);
+				long double* res = malloc(sizeof(long double));
 				if (!res) {
 					perror("alloc failure\n");
 					return 0;
@@ -121,7 +121,7 @@ long double calcPostfixExpression(char* expression) {
 		}
 		else {
 			if (tmp->size != 0) {
-				long double *num = malloc(sizeof(long double));
+				long double* num = malloc(sizeof(long double));
 				if (!num) {
 					perror("alloc failure\n");
 					return 0;
@@ -154,7 +154,7 @@ long double calcPostfixExpression(char* expression) {
 	}
 	stackClean(tmp);
 	stackDestory(tmp);
-	long double *p = (long double*)stackPop(st);
+	long double* p = (long double*)stackPop(st);
 	stackClean(st);
 	stackDestory(st);
 	long double res = *p;
@@ -217,7 +217,10 @@ long double calcInfixExpression(char* expression) {
 					while (ops->size > 0 && *(char*)ops->top != '(' && *(int*)mapGet(m, s1) <= *(int*)mapGet(m, s2)) {
 						stackPush(nums, s2, sizeof(char) * 2);
 						free(stackPop(ops));
-						s2[0] = *(char*)ops->top;
+						if (ops->size > 0) {
+							s2[0] = *(char*)ops->top;
+						}
+
 					}
 					stackPush(ops, s1, sizeof(char) * 2);
 					free(s1);
@@ -253,7 +256,7 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
-				char *tmpC;
+				char* tmpC;
 				while (tmp->size != 0) {
 					tmpC = (char*)stackPop(tmp);
 					num[size - 1 - j] = *tmpC;
@@ -285,7 +288,7 @@ long double calcInfixExpression(char* expression) {
 				const unsigned long long size = tmp->size;
 				num[size] = '\0';
 				int j = 0;
-				char *tmpC;
+				char* tmpC;
 				while (tmp->size != 0) {
 					tmpC = (char*)stackPop(tmp);
 					num[size - 1 - j] = *tmpC;
@@ -307,7 +310,7 @@ long double calcInfixExpression(char* expression) {
 		const unsigned long long size = tmp->size;
 		num[size] = '\0';
 		int j = 0;
-		char *tmpC;
+		char* tmpC;
 		while (tmp->size != 0) {
 			tmpC = (char*)stackPop(tmp);
 			num[size - 1 - j] = *tmpC;
